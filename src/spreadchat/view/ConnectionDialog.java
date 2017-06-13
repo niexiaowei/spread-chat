@@ -48,7 +48,7 @@ public class ConnectionDialog extends JDialog
             @Override
             public void keyReleased(KeyEvent e) 
             {
-                super.keyPressed(e);
+                super.keyReleased(e);
                 
                 boolean enable = true;
                 for (Component c : getContentPane().getComponents()) 
@@ -64,6 +64,11 @@ public class ConnectionDialog extends JDialog
                 }
                 
                 btnConnect.setEnabled(enable);
+                
+                if (enable && KeyEvent.VK_ENTER == e.getKeyCode())
+                {
+                    connect();
+                }
             }
         };
 
@@ -74,6 +79,16 @@ public class ConnectionDialog extends JDialog
     }
     
     private void btnConnectOnActionPerformed(ActionEvent evt)
+    {
+        connect();
+    }
+    
+    private void btnCancelOnActionPerformed(ActionEvent evt)
+    {
+        setVisible(false);
+    }
+    
+    private void connect()
     {
         try 
         {
@@ -99,11 +114,6 @@ public class ConnectionDialog extends JDialog
             JOptionPane.showMessageDialog(this, "There was an error when trying to connect to the Spread server.\nPlease try again.", 
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }
-    
-    private void btnCancelOnActionPerformed(ActionEvent evt)
-    {
-        setVisible(false);
     }
 
     // ------------- Other (NetBeans auto generated stuff)
@@ -145,6 +155,7 @@ public class ConnectionDialog extends JDialog
         txtNickname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         chkPriority.setMnemonic('r');
+        chkPriority.setSelected(true);
         chkPriority.setText("Priority connection");
 
         btnCancel.setText("Cancel");

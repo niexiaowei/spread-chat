@@ -1,8 +1,8 @@
 package spreadchat.view;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import spread.SpreadException;
@@ -54,11 +54,14 @@ public class MainWindow extends JFrame implements ConnectionListener
             btnSendMessageOnActionPerformed(e);
         });
         
-        txtMessage.addKeyListener(new KeyListener() 
+        txtMessage.addKeyListener(new KeyAdapter() 
         {
+            
             @Override
             public void keyPressed(KeyEvent e) 
             {
+                super.keyPressed(e);
+                
                 if (KeyEvent.VK_ENTER == e.getKeyCode() &&
                         chkSendWithEnterKey.isSelected()) 
                 {
@@ -66,11 +69,6 @@ public class MainWindow extends JFrame implements ConnectionListener
                 }
             }
             
-            @Override
-            public void keyTyped(KeyEvent e) {}
-
-            @Override
-            public void keyReleased(KeyEvent e) {}
         });
     }
     

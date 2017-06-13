@@ -51,19 +51,19 @@ public class MessageListener implements AdvancedMessageListener
         else if (membershipInfo.isCausedByJoin())
         {
             user = membershipInfo.getJoined();
-            messagePanel.addMessage(user.toString(), " entered in the group.");
+            messagePanel.addInformationMessage(user.toString(), " entered in the group.");
             userPanel.addUser(user);
         }
         else if (membershipInfo.isCausedByLeave() && 
                 null != (user = membershipInfo.getLeft()))
         {
-            messagePanel.addMessage(user.toString(), " left the group.");
+            messagePanel.addInformationMessage(user.toString(), " left the group.");
             userPanel.removeUser(user);
         }
         else if (membershipInfo.isCausedByDisconnect() && 
                 null != (user = membershipInfo.getDisconnected()))
         {
-            messagePanel.addMessage(user.toString(), " was disconnected.");
+            messagePanel.addInformationMessage(user.toString(), " was disconnected.");
             userPanel.removeUser(user);
         }
     }

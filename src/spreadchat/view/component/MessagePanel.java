@@ -16,6 +16,7 @@ public class MessagePanel extends JEditorPane
     // ------------- Class attributes
     
     private HTMLDocument doc;
+    private Element bodyElement;
     
     
     // ------------- Public methods
@@ -35,8 +36,7 @@ public class MessagePanel extends JEditorPane
     {
         try 
         {
-            Element body = doc.getElement(doc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);
-            doc.insertBeforeEnd(body, generateMessage(user, message));
+            doc.insertBeforeEnd(bodyElement, generateMessage(user, message));
         } 
         catch (IOException | BadLocationException ex)
         {
@@ -44,6 +44,17 @@ public class MessagePanel extends JEditorPane
         }
     }
     
+    public void addInformationMessage(String user, String message)
+    {
+        try
+        {
+            doc.insertBeforeEnd(bodyElement, generateInformationMessage(user, message));
+        }
+        catch (IOException | BadLocationException ex)
+        {
+            Logger.getLogger(MessagePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     // ------------- Private methods
     
@@ -54,6 +65,7 @@ public class MessagePanel extends JEditorPane
                 "     <title>SpreadChat</title>" +
                 "     <style type=\"text/css\">" +
                 "       p { margin: 0 0 5px 0; }" +
+                "       p.info-message { color: #777; }" +
                 "       p span.nickname { color: #3333CC; font-weight: bold; }" +
                 "     </style>" +
                 "   </head>" +
@@ -61,6 +73,7 @@ public class MessagePanel extends JEditorPane
                 "</html>");
         
         doc = (HTMLDocument) getDocument();
+        bodyElement = doc.getElement(doc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);
     }
     
     private String generateMessage(String user, String message)
@@ -73,6 +86,25 @@ public class MessagePanel extends JEditorPane
                      "</p>";
         
         return msg;
+    }
+    
+    private String generateInformationMessage(String user, String message)
+    {
+        StringBuilder stringBuilder = new StringBuilder("<p class=\"info-message\">");
+        
+        if (null != user)
+        {
+            stringBuilder
+                    .append("<span class=\"nickname\">")
+                    .append(user)
+                    .append("</span>");
+        }
+        
+        stringBuilder
+                .append(" ")
+                .append(message);
+        
+        return stringBuilder.toString();
     }
     
 }
