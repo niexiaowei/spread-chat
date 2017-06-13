@@ -1,12 +1,15 @@
 package spreadchat.view;
 
+import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import spread.SpreadException;
 import spreadchat.model.Connection;
 
@@ -37,6 +40,37 @@ public class ConnectionDialog extends JDialog
         {
             btnCancelOnActionPerformed(e);
         });
+
+        // JTextFields keyAdapter
+        KeyAdapter keyAdapter = new KeyAdapter()
+        {
+            
+            @Override
+            public void keyReleased(KeyEvent e) 
+            {
+                super.keyPressed(e);
+                
+                boolean enable = true;
+                for (Component c : getContentPane().getComponents()) 
+                {
+                    if (c instanceof JTextField)
+                    {
+                        if (((JTextField) c).getText().trim().equalsIgnoreCase(""))
+                        {
+                            enable = false;
+                            break;
+                        }
+                    }
+                }
+                
+                btnConnect.setEnabled(enable);
+            }
+        };
+
+        txtHostAddress.addKeyListener(keyAdapter);
+        txtPort.addKeyListener(keyAdapter);
+        txtNickname.addKeyListener(keyAdapter);
+        txtGroup.addKeyListener(keyAdapter);
     }
     
     private void btnConnectOnActionPerformed(ActionEvent evt)
@@ -57,12 +91,14 @@ public class ConnectionDialog extends JDialog
         } 
         catch (UnknownHostException ex) 
         {
-            System.out.println(ex);
+            JOptionPane.showMessageDialog(this, "The host " + txtHostAddress.getText() + 
+                    " could not be located or is unavailable.\nPlease try again later.", "Error", JOptionPane.ERROR_MESSAGE);
         }
         catch (SpreadException ex) 
         {
-            Logger.getLogger(ConnectionDialog.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+            JOptionPane.showMessageDialog(this, "There was an error when trying to connect to the Spread server.\nPlease try again.", 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     private void btnCancelOnActionPerformed(ActionEvent evt)
@@ -115,6 +151,7 @@ public class ConnectionDialog extends JDialog
 
         btnConnect.setMnemonic('c');
         btnConnect.setText("Connect");
+        btnConnect.setEnabled(false);
 
         jLabel3.setDisplayedMnemonic('n');
         jLabel3.setLabelFor(txtNickname);

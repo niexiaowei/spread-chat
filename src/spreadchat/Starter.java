@@ -6,14 +6,14 @@ import javax.swing.UnsupportedLookAndFeelException;
 import spreadchat.model.Connection;
 import spreadchat.view.MainWindow;
 
-public class Starter 
+public class Starter
 {
 
     // ------------- Public static methods
     
-    public static void main(String[] args) 
+    public static void main(String[] args)
     {
-        EventQueue.invokeLater(() -> 
+        EventQueue.invokeLater(() ->
         {
             try
             {

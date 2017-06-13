@@ -3,8 +3,6 @@ package spreadchat.view;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import spread.SpreadException;
@@ -90,7 +88,8 @@ public class MainWindow extends JFrame implements ConnectionListener
             } 
             catch (SpreadException ex) 
             {
-                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Could not disconnect. It's recommended to close and reopen the application.", 
+                                                            "Disconnecting...", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -105,12 +104,10 @@ public class MainWindow extends JFrame implements ConnectionListener
                 try 
                 {
                     Connection.getInstance().disconnect();
-                    System.exit(0);
                 } 
-                catch (SpreadException ex) 
-                {
-                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                catch (SpreadException ex) {}
+                
+                System.exit(0);
             }
         }
         else System.exit(0);
@@ -123,6 +120,7 @@ public class MainWindow extends JFrame implements ConnectionListener
     
     private void toggleComponents(boolean enabled)
     {
+        lblMessageToSend.setEnabled(enabled);
         txtMessage.setEnabled(enabled);
         btnSendMessage.setEnabled(enabled);
         chkSendWithEnterKey.setEnabled(enabled);
@@ -138,7 +136,7 @@ public class MainWindow extends JFrame implements ConnectionListener
         }
         catch (SpreadException ex) 
         {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "There was an error when trying to send the message.\nPlease try again.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -188,6 +186,7 @@ public class MainWindow extends JFrame implements ConnectionListener
         lblUsers = new javax.swing.JLabel();
         lblMessage = new javax.swing.JLabel();
         chkSendWithEnterKey = new javax.swing.JCheckBox();
+        lblMessageToSend = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mnuConnect = new javax.swing.JMenuItem();
@@ -221,6 +220,10 @@ public class MainWindow extends JFrame implements ConnectionListener
         chkSendWithEnterKey.setToolTipText("");
         chkSendWithEnterKey.setEnabled(false);
 
+        lblMessageToSend.setText("Type a message to send...");
+        lblMessageToSend.setToolTipText("");
+        lblMessageToSend.setEnabled(false);
+
         mnuFile.setText("File");
 
         mnuConnect.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
@@ -244,43 +247,48 @@ public class MainWindow extends JFrame implements ConnectionListener
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 616, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(chkSendWithEnterKey))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSendMessage, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblMessage)
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblMessage)
+                                    .addComponent(chkSendWithEnterKey))
+                                .addGap(0, 383, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblUsers))))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblUsers)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSendMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblMessageToSend)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblUsers)
-                    .addComponent(lblMessage))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblUsers)
+                            .addComponent(lblMessage))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(chkSendWithEnterKey)
-                        .addGap(0, 12, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(lblMessageToSend)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnSendMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnSendMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkSendWithEnterKey)
+                .addGap(12, 12, 12))
         );
 
         pack();
@@ -294,6 +302,7 @@ public class MainWindow extends JFrame implements ConnectionListener
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblMessage;
+    private javax.swing.JLabel lblMessageToSend;
     private javax.swing.JLabel lblUsers;
     private spreadchat.view.component.MessagePanel messagePanel;
     private javax.swing.JMenuItem mnuConnect;
