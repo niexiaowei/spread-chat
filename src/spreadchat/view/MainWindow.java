@@ -1,14 +1,19 @@
 package spreadchat.view;
 
+import com.alee.laf.WebLookAndFeel;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import spread.SpreadException;
 import spreadchat.model.Connection;
 import spreadchat.model.ConnectionListener;
 import spreadchat.model.MessageListener;
+import spreadchat.util.FileIO;
         
 public class MainWindow extends JFrame implements ConnectionListener
 {
@@ -30,6 +35,8 @@ public class MainWindow extends JFrame implements ConnectionListener
         initComponents();
         initListeners();
         
+        setIconImage(new FileIO().loadIcon("app_icon_32x32.png").getImage());
+        
         Connection.getInstance().addMessageListener(new MessageListener(userPanel, messagePanel));
         txtMessage.requestFocus();
     }
@@ -47,6 +54,11 @@ public class MainWindow extends JFrame implements ConnectionListener
         mnuQuit.addActionListener((e) -> 
         {
             mnuQuitOnActionPerformed(e);
+        });
+        
+        mnuWebLAF.addActionListener((e) -> 
+        {
+            mnuWebLAFOnActionPerformed(e);
         });
         
         btnSendMessage.addActionListener((e) -> 
@@ -109,6 +121,26 @@ public class MainWindow extends JFrame implements ConnectionListener
             }
         }
         else System.exit(0);
+    }
+    
+    private void mnuWebLAFOnActionPerformed(ActionEvent evt)
+    {
+        if (mnuWebLAF.isSelected())
+        {
+            WebLookAndFeel.install(true);
+        }
+        else
+        {
+            try
+            {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                
+                // Updates the views
+                SwingUtilities.updateComponentTreeUI(this);
+                SwingUtilities.updateComponentTreeUI(connectionPanel);
+            }
+            catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {}
+        }
     }
     
     private void btnSendMessageOnActionPerformed(ActionEvent evt)
@@ -185,10 +217,12 @@ public class MainWindow extends JFrame implements ConnectionListener
         lblMessage = new javax.swing.JLabel();
         chkSendWithEnterKey = new javax.swing.JCheckBox();
         lblMessageToSend = new javax.swing.JLabel();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        menubar = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mnuConnect = new javax.swing.JMenuItem();
         mnuQuit = new javax.swing.JMenuItem();
+        mnuThemes = new javax.swing.JMenu();
+        mnuWebLAF = new javax.swing.JCheckBoxMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SpreadChat");
@@ -222,19 +256,30 @@ public class MainWindow extends JFrame implements ConnectionListener
         lblMessageToSend.setToolTipText("");
         lblMessageToSend.setEnabled(false);
 
+        mnuFile.setMnemonic('f');
         mnuFile.setText("File");
 
         mnuConnect.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
+        mnuConnect.setMnemonic('c');
         mnuConnect.setText("Connect");
         mnuFile.add(mnuConnect);
 
         mnuQuit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        mnuQuit.setMnemonic('q');
         mnuQuit.setText("Quit");
         mnuFile.add(mnuQuit);
 
-        jMenuBar1.add(mnuFile);
+        menubar.add(mnuFile);
 
-        setJMenuBar(jMenuBar1);
+        mnuThemes.setMnemonic('t');
+        mnuThemes.setText("Themes");
+
+        mnuWebLAF.setText("WebLAF");
+        mnuThemes.add(mnuWebLAF);
+
+        menubar.add(mnuThemes);
+
+        setJMenuBar(menubar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -295,17 +340,19 @@ public class MainWindow extends JFrame implements ConnectionListener
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSendMessage;
     private javax.swing.JCheckBox chkSendWithEnterKey;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblMessage;
     private javax.swing.JLabel lblMessageToSend;
     private javax.swing.JLabel lblUsers;
+    private javax.swing.JMenuBar menubar;
     private spreadchat.view.component.MessagePanel messagePanel;
     private javax.swing.JMenuItem mnuConnect;
     private javax.swing.JMenu mnuFile;
     private javax.swing.JMenuItem mnuQuit;
+    private javax.swing.JMenu mnuThemes;
+    private javax.swing.JCheckBoxMenuItem mnuWebLAF;
     private javax.swing.JTextArea txtMessage;
     private spreadchat.view.component.UserPanel userPanel;
     // End of variables declaration//GEN-END:variables
