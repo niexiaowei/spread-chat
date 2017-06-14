@@ -45,6 +45,12 @@ public class UserPanel extends JList<SpreadGroup>
         updateModel();
     }
     
+    public void clear()
+    {
+        model.clear();
+        updateModel();
+    }
+    
     
     // ------------- Private methods
     

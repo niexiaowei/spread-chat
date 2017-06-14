@@ -33,7 +33,7 @@ public class MessageListener implements AdvancedMessageListener
     public void regularMessageReceived(SpreadMessage sm) 
     {
         //System.out.println("Regular message received");
-        messagePanel.addMessage(sm.getSender().toString(), new String(sm.getData()));
+        messagePanel.addMessage(getUser(sm.getSender()), new String(sm.getData()));
     }
 
     @Override
@@ -51,21 +51,27 @@ public class MessageListener implements AdvancedMessageListener
         else if (membershipInfo.isCausedByJoin())
         {
             user = membershipInfo.getJoined();
-            messagePanel.addInformationMessage(user.toString(), " entered in the group.");
+            messagePanel.addInformationMessage(getUser(user), "entered in the group.");
             userPanel.addUser(user);
         }
         else if (membershipInfo.isCausedByLeave() && 
                 null != (user = membershipInfo.getLeft()))
         {
-            messagePanel.addInformationMessage(user.toString(), " left the group.");
+            messagePanel.addInformationMessage(getUser(user), "left the group.");
             userPanel.removeUser(user);
         }
         else if (membershipInfo.isCausedByDisconnect() && 
                 null != (user = membershipInfo.getDisconnected()))
         {
-            messagePanel.addInformationMessage(user.toString(), " was disconnected.");
+            messagePanel.addInformationMessage(getUser(user), "was disconnected.");
             userPanel.removeUser(user);
         }
+    }
+    
+    private String getUser(SpreadGroup user)
+    {
+        String[] userInfo = user.toString().split("#");
+        return userInfo[1];
     }
     
 }

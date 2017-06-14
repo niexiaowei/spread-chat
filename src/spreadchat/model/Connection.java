@@ -16,6 +16,7 @@ public class Connection
     private final SpreadConnection connection;
     private final Group group;
     private final List<ConnectionListener> listeners;
+    private AdvancedMessageListener advancedMessageListener;
     
     // ------------- Private methods
     
@@ -60,6 +61,7 @@ public class Connection
     
     public void addMessageListener(AdvancedMessageListener l)
     {
+        advancedMessageListener = l;
         connection.add(l);
     }
     
@@ -92,6 +94,12 @@ public class Connection
             leaveGroup();
 
             System.out.print("Finishing connection... ");
+            
+            if (null != advancedMessageListener)
+            {
+                connection.remove(advancedMessageListener);
+            }
+            
             connection.disconnect();
             System.out.println("OK.");
 

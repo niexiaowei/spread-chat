@@ -3,13 +3,16 @@ package spreadchat.view;
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import spread.SpreadException;
 import spreadchat.model.Connection;
 
@@ -76,6 +79,17 @@ public class ConnectionDialog extends JDialog
         txtPort.addKeyListener(keyAdapter);
         txtNickname.addKeyListener(keyAdapter);
         txtGroup.addKeyListener(keyAdapter);
+        
+        // Dialog listener
+        ActionListener escListener = (ActionEvent e) -> 
+        {
+            setVisible(false);
+        };
+                
+        getRootPane().registerKeyboardAction(
+                escListener, 
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), 
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
     
     private void btnConnectOnActionPerformed(ActionEvent evt)

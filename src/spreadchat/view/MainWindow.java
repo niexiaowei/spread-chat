@@ -27,6 +27,7 @@ public class MainWindow extends JFrame implements ConnectionListener
     // ------------- Public methods
     
     // Default ctor
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public MainWindow()
     {
         isConnected = false;
@@ -36,9 +37,6 @@ public class MainWindow extends JFrame implements ConnectionListener
         initListeners();
         
         setIconImage(new FileIO().loadIcon("app_icon_32x32.png").getImage());
-        
-        Connection.getInstance().addMessageListener(new MessageListener(userPanel, messagePanel));
-        txtMessage.requestFocus();
     }
     
     
@@ -181,6 +179,9 @@ public class MainWindow extends JFrame implements ConnectionListener
         
         setTitle("SpreadChat - Connected as " + nickname);
         toggleComponents(true);
+        
+        Connection.getInstance().addMessageListener(new MessageListener(userPanel, messagePanel));
+        txtMessage.requestFocus();
     }
 
     @Override
@@ -192,6 +193,9 @@ public class MainWindow extends JFrame implements ConnectionListener
         
         setTitle("SpreadChat");
         toggleComponents(false);
+        
+        messagePanel.clear();
+        userPanel.clear();
     }
     
     @Override

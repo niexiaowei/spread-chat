@@ -56,6 +56,11 @@ public class MessagePanel extends JEditorPane
         }
     }
     
+    public void clear()
+    {
+        initHTMLDoc();
+    }
+    
     // ------------- Private methods
     
     private void initHTMLDoc()
